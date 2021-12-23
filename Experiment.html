@@ -19,7 +19,7 @@
         var welcome = {
             type: jsPsychHtmlKeyboardResponse,
             stimulus: "Welcome to the experiment! Press any key to begin",
-        }
+        };
         timeline.push(welcome);
 
         //define instructions & add 2 second gap afterwards
@@ -36,6 +36,45 @@
             post_trial_gap: 2000,
         };
         timeline.push(instructions);
+
+        //define fixation
+        var fixation = {
+            type: jsPsychHtmlKeyboardResponse,
+            stimulus: '<div style="font-size:60px;">+</div>',
+            choices: 'NO_KEYS',
+            trial_duration: function(){
+                return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
+           },
+           data: {
+               task: 'fixation',
+            },
+        };
+        timeline.push(fixation);
+        
+        //define trial stimuli array for timeline variables 
+        var stroop_variables = [
+            { color: "blue", text: "blue", condition: "congruent", correct_response: "b" },
+            { color: "red", text: "red", condition: "congruent", correct_response: "r"  },
+            { color: "yellow", text: "yellow", condition: "congruent", correct_response: "y"  },
+            { color: "green", text: "green", condition: "congruent", correct_response: "g"  },
+            { color: "blue", text: "yellow", condition: "incongruent", correct_response: "b"  },
+            { color: "red", text: "green", condition: "incongruent", correct_response: "r"  },
+            { color: "yellow", text: "blue", condition: "incongruent", correct_response: "y"  },
+            { color: "green", text: "red", condition: "incongruent", correct_response: "g"  }
+        ];
+
+        //define test trial
+        var test = {
+            type: jsPsychHtmlKeyboardResponse,
+            stimulus: function(){
+                var html = `
+                    <p style="color:${jsPsych.timelineVariable('color')}">
+                    ${jsPsych.timelineVariable('text')}</p>`;
+                return html;
+            },          
+            choices: ["r", "g", "b", "y"],
+        };
+        timeline.push(test);
 
         //start experiment
         jsPsych.run(timeline);
