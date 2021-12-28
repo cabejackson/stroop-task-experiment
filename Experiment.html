@@ -49,7 +49,6 @@
                task: 'fixation',
             },
         };
-        timeline.push(fixation);
         
         //define trial stimuli array for timeline variables 
         var stroop_variables = [
@@ -74,7 +73,15 @@
             },          
             choices: ["r", "g", "b", "y"],
         };
-        timeline.push(test);
+
+        // define test procedure
+        var test_procedure = {
+            timeline: [fixation, test],
+            timeline_variables: stroop_variables,
+            randomize_order: true,
+            repetitions: 1,
+        };
+        timeline.push(test_procedure);
 
         //start experiment
         jsPsych.run(timeline);
