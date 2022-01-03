@@ -9,11 +9,10 @@
     </head>
     <body></body>
     <script>
-        // initialize jsPsych
+        //initialize jsPsych
         const jsPsych = initJsPsych({
-        // display data at end of experiment
+        //display data at end of experiment
         on_finish: function() {
-            console.log("all the vars: ", stroop_variables)
             jsPsych.data.displayData();
         },
         });
@@ -76,19 +75,18 @@
                     <p style="color:${jsPsych.timelineVariable('color')}">
                     ${jsPsych.timelineVariable('text')}</p>`;
                 return html;
-            },          
+            },
             choices: ["r", "g", "b", "y"],
             data: {
                 task: 'response',
-                color: jsPsych.timelineVariable('color'), 
+                color: jsPsych.timelineVariable('color'),
                 text: jsPsych.timelineVariable('text'),
                 condition: jsPsych.timelineVariable('condition'),
                 correct_response: jsPsych.timelineVariable('correct_response'),
             },
             on_finish: function(data){
-                console.log("response", data.response)
                 data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
-            },        
+            },   
         };
 
         // define test procedure
@@ -106,10 +104,9 @@
             stimulus: function() { 
                 //responses
                 var trials = jsPsych.data.get().filter({ task: 'response'});
-                console.log("hiii trialss", trials);
+
                 //correct responses
                 var correct_trials = trials.filter({correct: true});
-                console.log("hiii correct", correct_trials);
 
                 var accuracy = Math.round(correct_trials.count() / trials.count() * 100);
                 //avg response time
@@ -119,7 +116,7 @@
                 <p>Your average response time was ${rt}ms.</p>
                 <p>Press any key to complete the experiment. Thank you!!</p>`
             }
-        }
+        };
         timeline.push(debrief_block);
 
         //start experiment
